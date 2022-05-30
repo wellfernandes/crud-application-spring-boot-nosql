@@ -1,6 +1,7 @@
 package wellfernandes.com.github.crud.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,29 @@ public class UserService {
 	public User insert(User obj) {
 		return userRepository.insert(obj);
 	}
-	
+
 	public void delete(String id) {
 		userRepository.findById(id);
 		userRepository.deleteById(id);
 	}
-	
+
+	public User update(User obj) {
+		try {
+			Optional<User> newUser = userRepository.findById(obj.getId());
+			User user = newUser.get();
+			updateData(user, obj);
+			return userRepository.save(user);
+		} catch (NoSuchElementException e) {
+			throw new ObjectNotFoundException("Object not found.");
+		}
+	}
+
+	// auxiliary method for user update
+	private void updateData(User user, User obj) {
+		user.setName(obj.getName());
+		user.setEmail(obj.getEmail());
+	}
+
 	public User fromDTO(UserDTO objDTO) {
 		return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
 	}
