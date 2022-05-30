@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import wellfernandes.com.github.crud.domain.User;
+import wellfernandes.com.github.crud.dto.UserDTO;
 import wellfernandes.com.github.crud.repository.UserRepository;
 import wellfernandes.com.github.crud.services.exception.ObjectNotFoundException;
 
@@ -24,5 +25,13 @@ public class UserService {
 		Optional<User> user = userRepository.findById(id);
 
 		return user.orElseThrow(() -> new ObjectNotFoundException("object not found!"));
+	}
+
+	public User insert(User obj) {
+		return userRepository.insert(obj);
+	}
+	
+	public User fromDTO(UserDTO objDTO) {
+		return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
 	}
 }
