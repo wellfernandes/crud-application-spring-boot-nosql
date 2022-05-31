@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import wellfernandes.com.github.crud.domain.Post;
 import wellfernandes.com.github.crud.domain.User;
+import wellfernandes.com.github.crud.dto.AuthorDTO;
 import wellfernandes.com.github.crud.repository.PostRepository;
 import wellfernandes.com.github.crud.repository.UserRepository;
 
@@ -35,11 +36,15 @@ public class Instantiation implements CommandLineRunner {
 		User maria = new User(null, "Maria Brown", "maria@gmail.com");
 		User alex = new User(null, "Alex Green", "alex@gmail.com");
 		User bob = new User(null, "Bob Grey", "bob@gmail.com");
+		
+		userRepository.saveAll(Arrays.asList(maria, alex, bob)); // salving users first
+		
+		Post post1 = new Post(null, sdf.parse("21/03/2018"), "lets travel!", "Im going to Sao Paulo!",
+				new AuthorDTO(maria));
+		Post post2 = new Post(null, sdf.parse("23/03/2018"), "good morning!!", "I woke up happy today.",
+				new AuthorDTO(maria));
 
-		Post post1 = new Post(null, sdf.parse("21/03/2018"), "lets travel!", "Im going to Sao Paulo!", maria);
-		Post post2 = new Post(null, sdf.parse("23/03/2018"), "good morning!!", "I woke up happy today.", maria);
-
-		userRepository.saveAll(Arrays.asList(maria, alex, bob));
+		
 		postRepository.saveAll(Arrays.asList(post1, post2));
 
 	}
